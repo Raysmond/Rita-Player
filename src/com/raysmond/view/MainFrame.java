@@ -66,7 +66,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		setUndecorated(true);									//取消窗口默认的边框
 		setResizable(false);									//不可改变大小
 		setLocationRelativeTo(null);							//窗口居中
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);				
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
 	/**
@@ -90,6 +90,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		initPlayListPanel();		//初始化播放列表面板
 		initLyricPanel();			//初始化歌词显示面板
 		initPanelRelations();		//初始化各面板之间的关系
+		System.out.println("Initialzed..");
 	}
 	
 	public void initWindowBar(){

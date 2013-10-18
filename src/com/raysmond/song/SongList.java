@@ -34,6 +34,7 @@ public class SongList implements ListController {
 		return listFile;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void open(File file) {
 		setListFile(file);

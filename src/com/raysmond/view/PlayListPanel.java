@@ -108,11 +108,12 @@ public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 		viewPanel.setLayout(new BorderLayout());
 		viewPanel.setBounds(0, 30, 300, 335);
 		viewPanel.setOpaque(false);
-		
+				
 		list.open(playListFile);;
 		showPlayList();
 		
 		add(viewPanel);
+		
 		
 		initPopupMenu();
 		initListControlPanel();
@@ -120,6 +121,7 @@ public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 		startControlThread();
 		currentList = playList;
 		currentListFlag = 0;
+		
 	}
 	
 	public void setPlayPanel(PlayPanel p){
@@ -286,18 +288,22 @@ public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 		butDownload.setContentAreaFilled(false);
 		butDownload.setFocusable(true);
 		
+		
 		/*FlowLayout flow = new FlowLayout();
 		flow.setAlignment(FlowLayout.LEFT);
 		panelControl.setLayout(flow);*/
 		panelControl.setLayout(null);
 		butAdd.setBounds(5, 0, 32, 32);
 		butPlayChoice.setBounds(40, 0, 32, 32);
+		
 		butDownload.setBounds(40+40, 0, 32, 32);
+		
 		panelControl.add(butAdd);
 		panelControl.add(butPlayChoice);
 		panelControl.add(butDownload);
 		panelControl.setBorder(null);
 		panelControl.setOpaque(false);
+		
 		
 		butDownload.addActionListener(this);
 		butDownload.addMouseListener(new MouseAdapter(){
@@ -310,6 +316,7 @@ public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 				butDownload.setIcon(Util.iconBaiduMusic);
 			}
 			});
+	    
 		
 		butAdd.addActionListener(this);
 		butAdd.addMouseListener(new MouseAdapter(){
@@ -343,7 +350,7 @@ public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 		if(fileChooser==null){
 			fileChooser = new JFileChooser();
 			fileChooser.setMultiSelectionEnabled(true);
-			fileChooser.setFileFilter(new FileNameExtensionFilter("mp3нд╪Ч","mp3"));
+			fileChooser.setFileFilter(new FileNameExtensionFilter("mp3 files","mp3"));
 		}
 		int state = fileChooser.showOpenDialog(this);
 		if(state == JFileChooser.APPROVE_OPTION){
@@ -803,16 +810,15 @@ public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 		}
 	}
 	public void startControlThread(){
-		if(controlThread==null||!controlThread.isAlive()){
+		if(controlThread==null){
 			controlThread = new Thread(this);
 		}
 		controlThread.start();
 	}
+	
 	public void stopControlThread(){
 		if(controlThread!=null){
-			if(controlThread.isAlive()){
-				controlThread.stop();
-			}
+			controlThread.stop();
 			controlThread = null;
 		}
 	}
@@ -824,7 +830,7 @@ public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 	}
 	
 	@Override
-	public synchronized void run(){
+	public  void run(){
 		if(Thread.currentThread()==controlThread){
 			while(true){
 				try {
