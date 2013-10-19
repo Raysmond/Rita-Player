@@ -1,4 +1,4 @@
-package com.raysmond.player1;
+package com.raysmond.player;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

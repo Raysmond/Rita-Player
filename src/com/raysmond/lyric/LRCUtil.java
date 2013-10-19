@@ -1,17 +1,22 @@
 package com.raysmond.lyric;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
+
 import javax.swing.table.DefaultTableModel;
 
-import com.raysmond.internet.JsoupTest;
+import com.raysmond.internet.BaiduLyricsDownloader;
 
 public class LRCUtil {
 	
 	public static ArrayList<LRCSearchResult> searchLRCFromBaidu(String title,String artist,int number){
 		ArrayList<LRCSearchResult> results = new ArrayList<LRCSearchResult>();
-		results = JsoupTest.getSearchResultFromBaidu(title,artist,number);
+		BaiduLyricsDownloader download = new BaiduLyricsDownloader();
+		results = download.searchLyrics(title,number);
 		return results;
 	}
 	
@@ -35,5 +40,29 @@ public class LRCUtil {
 			model.addRow(row);
 		}
 		return model;
+	}
+	
+	/**
+	 * Save lrc file to local directory
+	 * @param dir directory where to save the lrc file
+	 * @param lrcTitle the file title
+	 * @param lrcText the content of lyric
+	 */
+	public static void saveLRC(String dir,String lrcTitle, String lrcText) {
+		File saveDir = new File(dir);
+		try{
+			if(!saveDir.exists()){
+				saveDir.mkdir();
+			}
+			File lrcFile = new File(dir + "/" + lrcTitle);
+			if (!lrcFile.exists()) {
+				lrcFile.createNewFile();
+			}
+			FileOutputStream fo = new FileOutputStream(lrcFile);
+			fo.write(lrcText.getBytes("utf-8"));
+			fo.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 }

@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.MalformedURLException;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,9 +17,9 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.raysmond.player1.BasicController;
-import com.raysmond.player1.BasicPlayer;
-import com.raysmond.player1.BasicPlayerException;
+import com.raysmond.player.BasicController;
+import com.raysmond.player.BasicPlayer;
+import com.raysmond.player.BasicPlayerException;
 import com.raysmond.song.Song;
 import com.raysmond.util.Util;
 public class PlayPanel extends JPanel implements ActionListener {

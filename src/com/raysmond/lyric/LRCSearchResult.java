@@ -16,6 +16,13 @@ public class LRCSearchResult {
 		
 	}
 	
+	public LRCSearchResult(String title,String artist,String downloadLink,String content){
+		this.songTitle = title;
+		this.songArtist = artist;
+		this.downloadUrl = downloadLink;
+		this.lrcText = content;
+	}
+	
 	public String getSongTitle() {
 		return songTitle;
 	}
@@ -53,11 +60,6 @@ public class LRCSearchResult {
 
 	public void setLrcText(String lrcText) {
 		this.lrcText = lrcText;
-	}
-
-
-	public static void main(String[] args) {
-
 	}
 
 }

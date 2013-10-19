@@ -20,7 +20,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *----------------------------------------------------------------------
  */
-package com.raysmond.player1;
+package com.raysmond.player;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -46,10 +47,13 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
 import javazoom.spi.PropertiesContainer;
+
 import org.tritonus.share.sampled.TAudioFormat;
 import org.tritonus.share.sampled.file.TAudioFileFormat;
-import static com.raysmond.player1.BasicPlayerEvent.*;
+
+import static com.raysmond.player.BasicPlayerEvent.*;
 
 /**
  * BasicPlayer is a threaded simple player class based on JavaSound API.
@@ -86,8 +90,7 @@ public class BasicPlayer implements BasicController, Runnable {
 //    public static final int SEEKING = 4;
     private int m_status = UNKNOWN;
     private Map empty_map = new HashMap();
-    private BasicPlayerEventLauncher laucher;//事件分派器
-
+    private BasicPlayerEventLauncher laucher;//事件分派�?
     /**
      * Constructs a Basic Player.
      */
@@ -555,8 +558,8 @@ public class BasicPlayer implements BasicController, Runnable {
         log.info("Thread Running");
         int nBytesRead = 1;
         byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];
-        int readIndex = 0;//所有读进缓冲区的数量
-        int writeIndex = 0;//所有写出数量
+        int readIndex = 0;//�?��读进缓冲区的数量
+        int writeIndex = 0;//�?��写出数量
         // Lock stream while playing.
         synchronized (m_audioInputStream) {
             boolean buffering = false;
@@ -571,7 +574,7 @@ public class BasicPlayer implements BasicController, Runnable {
                             System.arraycopy(abData, 0, pcm, 0, nBytesRead);
                             if (m_line.available() >= m_line.getBufferSize()) {
 //                                buffering = true;
-                                log.fine("缓冲区空虚 : " + m_line.available() + "/" + m_line.getBufferSize());
+                                log.fine("缓冲区空�?: " + m_line.available() + "/" + m_line.getBufferSize());
                             }
 //                            if(m_line.available()==0){
 //                                buffering=false;
@@ -611,9 +614,9 @@ public class BasicPlayer implements BasicController, Runnable {
                 } else {
                     synchronized (m_audioInputStream) {
                         try {
-                            log.log(Level.INFO, "状态是不正在播放,要无限期的等待了.....");
+                            log.log(Level.INFO, "状�?是不正在播放,要无限期的等待了.....");
                             m_audioInputStream.wait();
-                            log.log(Level.INFO, "状态改过来了,等待被唤醒了.......");
+                            log.log(Level.INFO, "状�?改过来了,等待被唤醒了.......");
                         } catch (InterruptedException ex) {
                             Logger.getLogger(BasicPlayer.class.getName()).log(Level.SEVERE, null, ex);
                         }

@@ -18,6 +18,7 @@ import java.io.RandomAccessFile;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +41,9 @@ import javax.swing.text.StyledDocument;
 
 import com.raysmond.lyric.LRCSearchResult;
 import com.raysmond.lyric.LRCUtil;
+import com.raysmond.lyric.LyricFileParser;
+import com.raysmond.lyric.LyricFileParserImpl;
+import com.raysmond.lyric.LyricLine;
 import com.raysmond.song.Song;
 import com.raysmond.util.Util;
 
@@ -54,19 +58,16 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 	private static final long serialVersionUID = 7991482538335656273L;
 
 	// 当前播放的歌曲
-	Song song = null;
-
+	private Song song = null;
+	private int currentLine = 0;
+	
 	public final Pattern pattern = Pattern.compile("(?<=//[).*?(?=//])");
-
-	public final File lyricFile = Util.lyricFile;
-	public final String dirPath = Util.lyricDirPath;
 	static RandomAccessFile in = null;
 
 	SimpleAttributeSet bSet = null;
 
 	private ArrayList<JLabel> lyrics = new ArrayList<JLabel>();
 	private ArrayList<String> times = new ArrayList<String>();
-	private int currentLine = 0;
 
 	private Color hoverColor = new Color(201, 13, 13);
 	private Color defaultColor = Color.BLACK;
@@ -123,8 +124,8 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 				int row = resultTable.getSelectedRow();
 				LRCSearchResult result = results.get(row);
 				System.out.println(result.getLrcText());
-				saveLRC(Song.getFileNameNoEx(song.getFileName()) + ".lrc",
-						result.getLrcText());
+				String fileName = Song.getFileNameNoEx(song.getFileName()) + ".lrc";
+				LRCUtil.saveLRC(Util.lyricDirPath,fileName, result.getLrcText());
 				loadLocalLyric();
 				if (lyrics.size() == 0) {
 					loadInfoWhenNoLyricFound();
@@ -133,23 +134,6 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 					displayLyrics();
 				}
 			}
-		}
-	}
-
-	private void saveLRC(String lrcTitle, String lrcText) {
-		File lrcFile = new File(Util.lyricDirPath + "/" + lrcTitle);
-		if (!lrcFile.exists()) {
-			try {
-				lrcFile.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		try {
-			FileOutputStream fo = new FileOutputStream(lrcFile);
-			fo.write(lrcText.getBytes("utf-8"));
-			fo.close();
-		} catch (Exception e) {
 		}
 	}
 
@@ -173,12 +157,18 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 	 */
 	public void loadLocalLyric() {
 		String songNameNoEx = Song.getFileNameNoEx(song.getFileName());
-		File file = new File(dirPath + "/" + songNameNoEx + ".lrc");
+		String fileName = Util.lyricDirPath + "/" + songNameNoEx + ".lrc";
 		resetLyricPanel();
-		if (file.exists()) {
-			ArrayList<String> lyricsTmp = LyricPanel.readLyricFromFile(file);
-			for (int i = 0; i < lyricsTmp.size(); i++) {
-				parserLine(lyricsTmp.get(i));
+		LyricFileParser parser = new LyricFileParserImpl();
+		List<LyricLine> lines = parser.parseLyric(fileName);
+		if(null!=lines){
+			for(LyricLine line: lines){
+				JLabel label = new JLabel(line.getContent(),(int) JLabel.LEFT_ALIGNMENT);
+				label.setFont(defaultFont);
+				label.setPreferredSize(new Dimension(this.getWidth(), 30));
+				label.setBackground(null);
+				lyrics.add(label);
+				times.add(String.valueOf(line.getTime()));
 			}
 		}
 	}
@@ -239,8 +229,7 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 			return;
 		JLabel labelSearching = new JLabel("正在在线匹配歌词，请稍等...",
 				(int) JLabel.LEFT_ALIGNMENT);
-		labelSearching.setBounds(0, this.getHeight() / 2 - 30, this.getWidth(),
-				50);
+		labelSearching.setBounds(0, getHeight() / 2 - 30, getWidth(),50);
 		labelSearching.setFont(new Font("Microsoft YaHei", Font.BOLD, 16));
 		labelSearching.setForeground(new Color(121, 49, 0));
 
@@ -259,22 +248,19 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 					title = Song.getFileNameNoEx(song.getFileName());
 				String artist = song.getArtist();
 
-				ArrayList<LRCSearchResult> results = LRCUtil
-						.searchLRCFromBaidu(title, artist, 1);
-
+				ArrayList<LRCSearchResult> results = LRCUtil.searchLRCFromBaidu(title, artist, 1);
+				
 				if (results != null && results.size() == 1) {
-					saveLRC(Song.getFileNameNoEx(song.getFileName()) + ".lrc",
-							results.get(0).getLrcText());
+					String fileName = Song.getFileNameNoEx(song.getFileName()) + ".lrc";
+					LRCUtil.saveLRC(Util.lyricDirPath, fileName, results.get(0).getLrcText());
 					loadLocalLyric();
 					if (lyrics.size() != 0) {
 						lyricLoaded = true;
 						displayLyrics();
-					} else {
-						loadInfoWhenNoLyricFound();
-					}
-				} else {
-					loadInfoWhenNoLyricFound();
-				}
+						return;
+					} 
+				} 
+				loadInfoWhenNoLyricFound();
 			}
 		}).start();
 	}
@@ -344,99 +330,6 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 			currentLine = line;
 			displayLyrics(line);
 		}
-	}
-
-	public String parseLine(String line) {
-		Matcher matcher = pattern.matcher(line);
-		String str = null;
-		while (matcher.find()) {
-			String time = matcher.group();
-			str = line.substring(line.indexOf(time) + time.length() + 1);
-		}
-		return str;
-	}
-
-	/**
-	 * 歌词解析，并把解析结果加入歌词列表中
-	 * 
-	 * @param str
-	 */
-	private void parserLine(String str) {
-		// 取得歌曲名信息
-		if (str.startsWith("[ti:")) {
-			String title = str.substring(4, str.length() - 1);
-			System.out.println("title--->" + title);
-
-		}// 取得歌手信息
-		else if (str.startsWith("[ar:")) {
-			String singer = str.substring(4, str.length() - 1);
-			System.out.println("singer--->" + singer);
-
-		}// 取得专辑信息
-		else if (str.startsWith("[al:")) {
-			String album = str.substring(4, str.length() - 1);
-			System.out.println("album--->" + album);
-
-		}// 通过正则取得每句歌词信息
-		else {
-			String reg = "\\[(\\d{2}:\\d{2}\\.\\d{2})\\]";
-			Pattern pattern = Pattern.compile(reg);
-			Matcher matcher = pattern.matcher(str);
-			long currentTime = 0;
-			String currentContent = null;
-
-			while (matcher.find()) {
-				String msg = matcher.group();
-				int start = matcher.start();
-				int end = matcher.end();
-				int groupCount = matcher.groupCount();
-				for (int i = 0; i <= groupCount; i++) {
-					String timeStr = matcher.group(i);
-					if (i == 1) {
-						currentTime = Util.tranlateTimeStrToLong(timeStr);
-					}
-				}
-
-				String[] content = pattern.split(str);
-				for (int i = 0; i < content.length; i++) {
-					if (i == content.length - 1) {
-						currentContent = content[i];
-					}
-				}
-				System.out.println("时间：" + currentTime + "----歌词："
-						+ currentContent);
-				JLabel label = new JLabel(currentContent,
-						(int) JLabel.LEFT_ALIGNMENT);
-				label.setFont(defaultFont);
-				label.setPreferredSize(new Dimension(this.getWidth(), 30));
-				label.setBackground(null);
-				lyrics.add(label);
-				times.add(String.valueOf(currentTime));
-			}
-		}
-	}
-
-	public static ArrayList<String> readLyricFromFile(File file) {
-		ArrayList<String> lyricList = new ArrayList<String>();
-		String line = null;
-		in = null;
-		try {
-			in = new RandomAccessFile(file.getAbsolutePath(), "r");
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
-		}
-		if (in != null) {
-			try {
-				while ((line = in.readLine()) != null) {
-					line = new String(line.getBytes("iso8859-1"), "utf-8");
-					lyricList.add(line);
-				}
-				in.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return lyricList;
 	}
 
 	public void moveToNextLine() {
@@ -569,7 +462,6 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 		}
 		fieldTitle.setText(title);
 		fieldArtist.setText(artist);
-
 		dialog.setVisible(true);
 	}
 

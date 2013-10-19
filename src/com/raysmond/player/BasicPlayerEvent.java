@@ -20,7 +20,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *----------------------------------------------------------------------
  */
-package com.raysmond.player1;
+package com.raysmond.player;
 
 /**
  * This class implements player events. 

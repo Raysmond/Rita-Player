@@ -20,7 +20,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *----------------------------------------------------------------------
  */
-package com.raysmond.player1;
+package com.raysmond.player;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;

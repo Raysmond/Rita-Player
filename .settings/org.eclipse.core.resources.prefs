@@ -1,7 +1,7 @@
 eclipse.preferences.version=1
-encoding//src/com/raysmond/player1/BasicPlayer.java=UTF-8
-encoding//src/com/raysmond/player1/BasicPlayerEvent.java=UTF-8
-encoding//src/com/raysmond/player1/BasicPlayerEventLauncher.java=UTF-8
-encoding//src/com/raysmond/player1/BasicPlayerException.java=UTF-8
-encoding//src/com/raysmond/player1/BasicPlayerListener.java=UTF-8
+encoding//src/com/raysmond/player/BasicPlayer.java=UTF-8
+encoding//src/com/raysmond/player/BasicPlayerEvent.java=UTF-8
+encoding//src/com/raysmond/player/BasicPlayerEventLauncher.java=UTF-8
+encoding//src/com/raysmond/player/BasicPlayerException.java=UTF-8
+encoding//src/com/raysmond/player/BasicPlayerListener.java=UTF-8
 encoding/<project>=GBK
