@@ -1,1 +1,1 @@
-java -jar RitaPlayer1.1.jar
+java -jar RitaPlayer.jar
