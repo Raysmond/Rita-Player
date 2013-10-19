@@ -263,13 +263,5 @@ public class Song implements TagInfo,Comparable {
 		}
 		return -1;
 	}
-	
-	public static void main(String args[]) throws Exception{
-		Song song = new Song();
-		song.load(new File("E:\\Mariah Carey - I Still Believe.mp3"));
-		System.out.println(song.toString());
-	}
-
-	
 }
 

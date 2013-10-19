@@ -280,8 +280,9 @@ public class Util {
 	}
 	
 	public static String GBKString(String s){
+		
 		try {
-			return new String(s.getBytes("iso8859-1"),"gbk");
+			return new String(s.getBytes(),"gbk");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

@@ -125,11 +125,11 @@ public class JAudioTagger implements TagInfo {
 	
 	public void readTag(){
 		if(tag==null) return;
-		artist = Util.GBKString(tag.getFirst(FieldKey.ARTIST));
-		album = Util.GBKString(tag.getFirst(FieldKey.ALBUM));
-		title = Util.GBKString(tag.getFirst(FieldKey.TITLE));
-		comment = Util.GBKString(tag.getFirst(FieldKey.COMMENT));
-		year = Util.GBKString(tag.getFirst(FieldKey.YEAR));
+		artist = (tag.getFirst(FieldKey.ARTIST));
+		album = (tag.getFirst(FieldKey.ALBUM));
+		title = (tag.getFirst(FieldKey.TITLE));
+		comment = (tag.getFirst(FieldKey.COMMENT));
+		year = (tag.getFirst(FieldKey.YEAR));
 		track = tag.getFirst(FieldKey.TRACK);
 		tag.getFirst(FieldKey.DISC_NO);
 		tag.getFirst(FieldKey.COMPOSER);
@@ -270,14 +270,4 @@ public class JAudioTagger implements TagInfo {
 		return format;
 	}
 	
-	public static void main(String args[]) throws Exception{
-		JAudioTagger song = new JAudioTagger(new File("D:\\Music\\mp3\\周传雄 - 关不上的窗.mp3"));
-		song.readTag();
-		System.out.println(song.toString());                                                                          
-		
-		JAudioTagger mp3song = new JAudioTagger();
-		mp3song.loadMP3File(new File("D:\\Music\\mp3\\张韶涵 - 隐形的翅膀.mp3"));
-		mp3song.readTag();
-		System.out.println(mp3song.toString());
-	}
 }
