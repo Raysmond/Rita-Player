@@ -50,16 +50,18 @@ public class PlayingSongPanel extends JPanel {
 	private Color infoColor = Util.getThemeDefaultColor();
 	private Color titleColor = Util.getThemeHighlightColor();
 	
-	private static int WIDTH = 300;
-	private static int HEIGHT = 120;
+	public static int WIDTH = 300;
+	public static int HEIGHT = 120;
 	
 	public PlayingSongPanel(){
 		init();
-		showInfo(null);
+		setSong(null);
 	}
 	
 	public PlayingSongPanel(Song song){
 		init();
+		if(null==song) return;
+		setSong(song);
 		showInfo(song);
 	}
 	
@@ -68,7 +70,6 @@ public class PlayingSongPanel extends JPanel {
 	 * @param song
 	 */
 	public void showInfo(Song song){
-		setSong(song);
 		loadSongInfo();
 		loadDefaultAlbumImage();
 		loadAlbumImage();
@@ -78,7 +79,6 @@ public class PlayingSongPanel extends JPanel {
 	 * 加载正在播放的歌曲的标题,歌手,专辑
 	 */
 	private void loadSongInfo() {
-		if(!isSetSong()) return;
 		labelTitle.setText(null);
 		if(song.getTitle()!=null&&!song.getTitle().isEmpty()){
 			labelTitle.setText(song.getTitle());
@@ -161,7 +161,6 @@ public class PlayingSongPanel extends JPanel {
 	 * 加载专辑图片
 	 */
 	public void loadAlbumImage(){
-		if(!isSetSong()) return;
 		Image img = null;
 		try{
 			img = JAudioTagger.getAlbumArt(new File(song.getLocation()));

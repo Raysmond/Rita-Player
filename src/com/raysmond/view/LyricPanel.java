@@ -60,7 +60,7 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 	// 当前播放的歌曲
 	private Song song = null;
 	private int currentLine = 0;
-	
+
 	public final Pattern pattern = Pattern.compile("(?<=//[).*?(?=//])");
 	static RandomAccessFile in = null;
 
@@ -123,9 +123,9 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 			if (e.getSource() == resultTable && e.getClickCount() == 2) { // 双击
 				int row = resultTable.getSelectedRow();
 				LRCSearchResult result = results.get(row);
-				System.out.println(result.getLrcText());
+				System.out.println("Get lyric content: \n" + result.getLrcText());
 				String fileName = Song.getFileNameNoEx(song.getFileName()) + ".lrc";
-				LRCUtil.saveLRC(Util.lyricDirPath,fileName, result.getLrcText());
+				LRCUtil.saveLRC(Util.lyricDirPath, fileName, result.getLrcText());
 				loadLocalLyric();
 				if (lyrics.size() == 0) {
 					loadInfoWhenNoLyricFound();
@@ -161,9 +161,10 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 		resetLyricPanel();
 		LyricFileParser parser = new LyricFileParserImpl();
 		List<LyricLine> lines = parser.parseLyric(fileName);
-		if(null!=lines){
-			for(LyricLine line: lines){
-				JLabel label = new JLabel(line.getContent(),(int) JLabel.LEFT_ALIGNMENT);
+		if (null != lines) {
+			for (LyricLine line : lines) {
+				JLabel label = new JLabel(line.getContent(),
+						(int) JLabel.LEFT_ALIGNMENT);
 				label.setFont(defaultFont);
 				label.setPreferredSize(new Dimension(this.getWidth(), 30));
 				label.setBackground(null);
@@ -229,7 +230,7 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 			return;
 		JLabel labelSearching = new JLabel("正在在线匹配歌词，请稍等...",
 				(int) JLabel.LEFT_ALIGNMENT);
-		labelSearching.setBounds(0, getHeight() / 2 - 30, getWidth(),50);
+		labelSearching.setBounds(0, getHeight() / 2 - 30, getWidth(), 50);
 		labelSearching.setFont(new Font("Microsoft YaHei", Font.BOLD, 16));
 		labelSearching.setForeground(new Color(121, 49, 0));
 
@@ -246,20 +247,20 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 				// 如果从TAG信息中获取的标题为空，则把歌曲文件名（无后缀）作为查找的关键词
 				if (title == null || title.isEmpty())
 					title = Song.getFileNameNoEx(song.getFileName());
-				String artist = song.getArtist();
 
-				ArrayList<LRCSearchResult> results = LRCUtil.searchLRCFromBaidu(title, artist, 1);
-				
+				ArrayList<LRCSearchResult> results = null;
+				results = LRCUtil.searchLRCFromBaidu(title, song.getArtist(), 1);
+
 				if (results != null && results.size() == 1) {
 					String fileName = Song.getFileNameNoEx(song.getFileName()) + ".lrc";
-					LRCUtil.saveLRC(Util.lyricDirPath, fileName, results.get(0).getLrcText());
+					LRCUtil.saveLRC(Util.lyricDirPath, fileName, results.get(0) .getLrcText());
 					loadLocalLyric();
 					if (lyrics.size() != 0) {
 						lyricLoaded = true;
 						displayLyrics();
 						return;
-					} 
-				} 
+					}
+				}
 				loadInfoWhenNoLyricFound();
 			}
 		}).start();
@@ -404,10 +405,7 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 	}
 
 	public boolean isSetSong() {
-		if (song != null)
-			return true;
-		else
-			return false;
+		return song != null ? true : false;
 	}
 
 	public Song getSong() {
