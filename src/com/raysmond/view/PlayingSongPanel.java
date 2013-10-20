@@ -55,13 +55,11 @@ public class PlayingSongPanel extends JPanel {
 	
 	public PlayingSongPanel(){
 		init();
-		setSong(null);
+		showInfo(null);
 	}
 	
 	public PlayingSongPanel(Song song){
 		init();
-		if(null==song) return;
-		setSong(song);
 		showInfo(song);
 	}
 	
@@ -70,6 +68,7 @@ public class PlayingSongPanel extends JPanel {
 	 * @param song
 	 */
 	public void showInfo(Song song){
+		setSong(song);
 		loadSongInfo();
 		loadDefaultAlbumImage();
 		loadAlbumImage();
@@ -80,6 +79,7 @@ public class PlayingSongPanel extends JPanel {
 	 */
 	private void loadSongInfo() {
 		labelTitle.setText(null);
+		if(song==null)return;
 		if(song.getTitle()!=null&&!song.getTitle().isEmpty()){
 			labelTitle.setText(song.getTitle());
 		}
