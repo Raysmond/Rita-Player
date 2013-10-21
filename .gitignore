@@ -1,5 +1,6 @@
 *.class
 *~
+*.jar
 # Package Files #
 *.zip
 /bin
@@ -8,3 +9,5 @@
 *.icns
 *.iconset
 *.pkg
+dist
+build.xml
