@@ -120,14 +120,14 @@ public class SearchSongDialog {
 				 System.out.println("点击下载："  + result.getFileName());
 				 System.out.println("下载链接："  + result.getDownloadUrl());
 				 
-				 File file = new File(".//data//mp3//" + result.getFileName());
+				 File file = new File(System.getProperty("user.dir")+"//data//mp3//" + result.getFileName());
 				 if(file.exists()){
 					 result.setFileName(result.getArtist() + result.getTitle() + "_" + Math.random()*1000 + ".mp3");
 				 }
 				 
 				 //启动下载线程
 				 //DownloadThread thread = new DownloadThread(parentPanel, result.getDownloadUrl(), "./data/mp3/",result.getFileName());
-				 DownloadThread thread = new DownloadThread(parentPanel, result,"./data/mp3/");
+				 DownloadThread thread = new DownloadThread(parentPanel, result,System.getProperty("user.dir")+"/data/mp3/");
 				 thread.start();
 			}
 		}

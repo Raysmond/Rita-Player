@@ -5,3 +5,6 @@
 /bin
 .hg*
 *.lrc
+*.icns
+*.iconset
+*.pkg

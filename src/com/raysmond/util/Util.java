@@ -2,8 +2,11 @@ package com.raysmond.util;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
@@ -18,7 +21,8 @@ import javax.swing.UIManager;
  */
 public class Util {
 	public static final String windowTitle = "Rita Player 1.1 - 2013";
-	public static final ImageIcon windowTitleIcon = new ImageIcon("./res/logo.png");
+	public static Resource resource = new Resource();
+	public static final ImageIcon windowTitleIcon = new ImageIcon(Util.getImage("res/logo.png"));
 	
 	//所有可选主题
 	public static final String[] themes = {
@@ -28,9 +32,15 @@ public class Util {
 		"2.jpg","6.jpg","10.jpg","13.jpg"};						 //其他色系
 	
 	public static int currentTheme = 0;							 //当前选择的主题
-	public static final String themeDir = "./res/themes/";		 //主题背景存放目录
+	public static final String themeDir = "res/themes/";		 //主题背景存放目录
 	
-	public static final String configFilePath = "./data/config.dat";
+	public static final String savePath = System.getProperty("user.home")+"/Rita Player";
+	public static final String lyricDirPath = "lyric";
+		
+	public static final String playList = savePath + "/playList.dat";
+	public static final String likeList = savePath + "/likeList.dat";
+	
+	public static final String configFilePath = savePath + "/config.dat";
 	public static Config config = new Config();
 	
 	public static final Color defaultColor = Color.BLACK;
@@ -61,35 +71,38 @@ public class Util {
 	public static final int windowWidth = 900;					 //主窗口宽
 	public static final int windowHeight = 600;					 //主窗口高
 	
-	public static final ImageIcon windowIconClose = new ImageIcon("./res/close_24.png");
-	public static final ImageIcon windowIconMinimize = new ImageIcon("./res/minimize_24.png");
-	public static final ImageIcon windowIconCloseHover = new ImageIcon("./res/closeHover.png");
-	public static final ImageIcon windowIconMinimizeHover = new ImageIcon("./res/minimizeHover.png");
-	
-	public static final File playList = new File("./data/playList.dat");
-	public static final File likeList = new File("./data/likeList.dat");
+	public static final ImageIcon windowIconClose = new ImageIcon(Util.getImage("res/close_24.png"));
+	public static final ImageIcon windowIconMinimize = new ImageIcon(Util.getImage("res/minimize_24.png"));
+	public static final ImageIcon windowIconCloseHover = new ImageIcon(Util.getImage("res/closeHover.png"));
+	public static final ImageIcon windowIconMinimizeHover = new ImageIcon(Util.getImage("res/minimizeHover.png"));
 	
 	public static final int defaultImageWidth = 32;
 	public static final int defaultImageHeight = 32;
 	public static final int albumHeight = 100;
 	
-	public static final ImageIcon iconPlayOne = new ImageIcon("./res/playOne.png");
-	public static final ImageIcon iconPlayOneLoop = new ImageIcon("./res/playOneLoop.png");
-	public static final ImageIcon iconPlayList = new ImageIcon("./res/playIncrease.png");
-	public static final ImageIcon iconPlayListLoop = new ImageIcon("./res/playListLoop.png");
-	public static final ImageIcon iconPlayRandom = new ImageIcon("./res/playRandom.png");
+	public static final ImageIcon iconPlayOne = new ImageIcon(Util.getImage("res/playOne.png"));
+	public static final ImageIcon iconPlayOneLoop = new ImageIcon(Util.getImage("res/playOneLoop.png"));
+	public static final ImageIcon iconPlayList = new ImageIcon(Util.getImage("res/playIncrease.png"));
+	public static final ImageIcon iconPlayListLoop = new ImageIcon(Util.getImage("res/playListLoop.png"));
+	public static final ImageIcon iconPlayRandom = new ImageIcon(Util.getImage("res/playRandom.png"));
 	
-	public static final ImageIcon iconBaiduMusic = new ImageIcon("./res/baiduMusic.png");
-	public static final ImageIcon iconBaiduMusicHover = new ImageIcon("./res/baiduMusicHover.png");
+	public static final ImageIcon iconBaiduMusic = new ImageIcon(Util.getImage("res/baiduMusic.png"));
+	public static final ImageIcon iconBaiduMusicHover = new ImageIcon(Util.getImage("res/baiduMusicHover.png"));
 	
 	public static final Font songTitleFont = new Font("Microsoft YaHei",Font.BOLD,12);
 	public static final Color songTitleColor = new Color(150,2,12);
 	public static final Font songInfoFont = new Font("Microsoft YaHei",Font.PLAIN,12);
 	
-	public static final File lyricFile = new File("./data/lyric");
-	public static final String lyricDirPath = "./data/lyric";
-	
-	public static final File albumDir = new File("./res/album");
+	//public static final File albumDir = Resource.getFile("res/album");
+	public static final String albumPath = "res/album";
+	public static final String[] albums = {
+		"res/album/album1.jpg",
+		"res/album/album2.jpg",
+		"res/album/album3.jpg",
+		"res/album/album4.jpg",
+		"res/album/album5.jpg",
+		"res/album/album6.jpg",
+		"res/album/album7.jpg"};
 	
 	public static Color getThemeDefaultColor(){
 		return themeDefaultColor[currentTheme];
@@ -268,13 +281,8 @@ public class Util {
 		if(iconMap.containsKey(name)){
 			return iconMap.get(name);
 		}
-		File file = new File("./res/" + name);
-		if(!file.exists()){
-			System.err.println("Image " + "./res/" + name + " not exists.");
-			return null;
-		}
 		ImageIcon icon = null;
-		icon = new ImageIcon("./res/" + name);
+		icon = new ImageIcon(Util.getImage("res/" + name));
 		iconMap.put(name, icon);
 		return icon;
 	}
@@ -287,5 +295,10 @@ public class Util {
 			e.printStackTrace();
 		}
 		return s;
+	}
+	
+	public static Image getImage(String path)
+	{
+		return (Toolkit.getDefaultToolkit().getImage(Resource.getResource(path)));
 	}
 }

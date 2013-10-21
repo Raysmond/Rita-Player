@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.Date;
 
 /**
@@ -52,21 +53,10 @@ public class Config implements Serializable{
 	 */
 	public static Config loadConfig(){
 		Config config = null;
-		File configFile = new File(Util.configFilePath);
-		FileInputStream fi;
-		if(!configFile.exists()){
-			try {
-				configFile.createNewFile();
-				Util.config.writeConfig();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 		try {
-			fi = new FileInputStream(configFile);
-			ObjectInputStream oi = new ObjectInputStream(fi);
+			FileInputStream in = new FileInputStream(Util.configFilePath);
+			ObjectInputStream oi = new ObjectInputStream(in);
 			config = (Config)oi.readObject();
-			fi.close();
 			oi.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -74,20 +64,21 @@ public class Config implements Serializable{
 		return config;
 	}
 	
+	public static void createConfigFile(String path){
+		File file = new File(path);
+		try {
+			file.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * 把配置信息写入本地文件
 	 */
 	public void writeConfig(){
-		File configFile = new File(Util.configFilePath);
-		if(!configFile.exists()){
-			try {
-				configFile.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 		try{
-			FileOutputStream fo = new FileOutputStream(configFile);
+			FileOutputStream fo = new FileOutputStream(Util.configFilePath);
 			ObjectOutputStream out = new ObjectOutputStream(fo);
 			out.writeObject(this);
 			out.close();

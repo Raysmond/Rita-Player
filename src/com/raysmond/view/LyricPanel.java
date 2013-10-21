@@ -157,7 +157,7 @@ public class LyricPanel extends JPanel implements Runnable, ActionListener {
 	 */
 	public void loadLocalLyric() {
 		String songNameNoEx = Song.getFileNameNoEx(song.getFileName());
-		String fileName = Util.lyricDirPath + "/" + songNameNoEx + ".lrc";
+		String fileName = Util.savePath + "/" + Util.lyricDirPath + "/" + songNameNoEx + ".lrc";
 		resetLyricPanel();
 		LyricFileParser parser = new LyricFileParserImpl();
 		List<LyricLine> lines = parser.parseLyric(fileName);

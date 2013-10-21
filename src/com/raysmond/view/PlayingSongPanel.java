@@ -239,17 +239,17 @@ public class PlayingSongPanel extends JPanel {
 	 */
 	public ImageIcon randomDefaultAlbum(){
 		//列出默认专辑里面的所有文件
+		/*
 		File[] files = Util.albumDir.listFiles(new FilenameFilter(){
 			@Override
 			public boolean accept(File arg0, String arg1) {
 				return arg1.endsWith("jpg");  
 			}});
+		*/
 		
-		System.out.println("默认的专辑数："+files.length);
-		if(files.length==0) return null;
-		int ramIndex = (int)(Math.random()*(files.length-1));
-		System.out.println("随机选择的专辑是：" + files[ramIndex].getPath());
-		return new ImageIcon(files[ramIndex].getPath());
+		int ranIndex = (int) (Math.random() * (Util.albums.length - 1));
+		System.out.println("随机选择的专辑是：" + Util.albums[ranIndex]);
+		return new ImageIcon(Util.getImage(Util.albums[ranIndex]));
 	}
 	/**
 	 * 加载默认专辑封面

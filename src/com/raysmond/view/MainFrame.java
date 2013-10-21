@@ -16,6 +16,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -84,8 +86,37 @@ public class MainFrame extends JFrame implements ActionListener{
 		}
 	}
 	
+	public void initConfig(){
+		File appSaveDir = new File(Util.savePath);
+		File configFile = new File(Util.configFilePath);
+		File playListFile = new File(Util.playList);
+		File likeListFile = new File(Util.likeList);
+		File lyricDir = new File(Util.savePath + "/" + Util.lyricDirPath);
+		if(!appSaveDir.exists()){
+			appSaveDir.mkdir();
+		}
+		if(!lyricDir.exists()){
+			lyricDir.mkdir();
+		}
+		try{
+			if(!configFile.exists()){
+				configFile.createNewFile();
+			}
+			if(!playListFile.exists()){
+				playListFile.createNewFile();
+			}
+			if(!likeListFile.exists()){
+				likeListFile.createNewFile();
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		loadConfig();
+	}
+	
 	public void init(){
-		loadConfig();				//加载主题配置信息
+		initConfig();				//加载主题配置信息
 		initPlayPanel();			//初始化播放控制面板
 		initPlayListPanel();		//初始化播放列表面板
 		initLyricPanel();			//初始化歌词显示面板
@@ -140,7 +171,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		butMinimize.setContentAreaFilled(false);
 		butMinimize.setFocusable(true);
 		
-		butChangeTheme = new JButton(new ImageIcon("./res/theme.png"));
+		butChangeTheme = new JButton(new ImageIcon(Util.getImage("res/theme.png")));
 		butChangeTheme.setBounds(Util.windowWidth-30-30-30,5,24,24);
 		butChangeTheme.setBackground(null);
 		butChangeTheme.setBorderPainted(false);
@@ -148,7 +179,8 @@ public class MainFrame extends JFrame implements ActionListener{
 		butChangeTheme.setContentAreaFilled(false);
 		butChangeTheme.setFocusable(true);
 		
-		butToggleLyric = new JButton(new ImageIcon("./res/lyric.png"));
+		//butToggleLyric = new JButton(new ImageIcon("res/lyric.png"));
+		butToggleLyric = new JButton(new ImageIcon(Util.getImage("res/lyric.png")));
 		butToggleLyric.setBounds(Util.windowWidth-30-30-30-30,5,24,24);
 		butToggleLyric.setBackground(null);
 		butToggleLyric.setBorderPainted(false);
@@ -194,22 +226,22 @@ public class MainFrame extends JFrame implements ActionListener{
 		butChangeTheme.addMouseListener(new MouseAdapter(){
 			public void mouseEntered(MouseEvent arg0) {
 				butChangeTheme.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				butChangeTheme.setIcon(new ImageIcon("./res/themeHover.png"));
+				butChangeTheme.setIcon(new ImageIcon(Util.getImage("res/themeHover.png")));
 			}
 			public void mouseExited(MouseEvent arg0) {
 				butChangeTheme.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-				butChangeTheme.setIcon(new ImageIcon("./res/theme.png"));
+				butChangeTheme.setIcon(new ImageIcon(Util.getImage("res/theme.png")));
 				}
 			});
 		
 		butToggleLyric.addMouseListener(new MouseAdapter(){
 			public void mouseEntered(MouseEvent arg0) {
 				butToggleLyric.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				butToggleLyric.setIcon(new ImageIcon("./res/lyricHover.png"));
+				butToggleLyric.setIcon(new ImageIcon(Util.getImage("res/lyricHover.png")));
 			}
 			public void mouseExited(MouseEvent arg0) {
 				butToggleLyric.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-				butToggleLyric.setIcon(new ImageIcon("./res/lyric.png"));
+				butToggleLyric.setIcon(new ImageIcon(Util.getImage("res/lyric.png")));
 				}
 			});
 	}
@@ -240,7 +272,7 @@ public class MainFrame extends JFrame implements ActionListener{
 			themePane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			
 			for(int i=0;i<radioThemes.length;i++){
-				ImageIcon img = new ImageIcon(Util.themeDir + Util.themes[i]);
+				ImageIcon img = new ImageIcon(Util.getImage(Util.themeDir + Util.themes[i]));
 				//scaleImage(src,((double)newHeight) / (double)toBufferedImage(src).getHeight());
 				//Image image = PlayingSongPanel.fitSize(img.getImage(), 100);
 				Image image = PlayingSongPanel.scaleImage(img.getImage(),
@@ -289,12 +321,12 @@ public class MainFrame extends JFrame implements ActionListener{
 	 * 绘制背景图片
 	 * @param bg
 	 */
-	ImageIcon bg = new ImageIcon(Util.themeDir + Util.themes[Util.currentTheme]);
+	ImageIcon bg = new ImageIcon(Util.getImage(Util.themeDir + Util.themes[Util.currentTheme]));
 	JLabel labelBg = null;
 	JPanel imagePanel = null;
 	public void setBackgroundImage(){
 		if(labelBg!=null)this.getLayeredPane().remove(labelBg);
-		bg = new ImageIcon(Util.themeDir + Util.themes[Util.currentTheme]);
+		bg = new ImageIcon(Util.getImage(Util.themeDir + Util.themes[Util.currentTheme]));
 	    labelBg = new JLabel(bg);
 	    labelBg.setBounds(0, 0, Util.windowWidth, Util.windowHeight);
 		imagePanel = (JPanel) this.getContentPane();

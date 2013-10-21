@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,8 +55,8 @@ import com.raysmond.util.Util;
 public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 	private static final long serialVersionUID = -689999949667356863L;
 	
-	private ListController list = new SongList(Util.playList);
-	private static final File playListFile = Util.playList;				//播放列表存放文件
+	private ListController list = new SongList(new File(Util.playList));
+	private static final File playListFile = new File(Util.playList);	//播放列表存放文件
 	private LinkedList<Song> playList = new LinkedList<Song>();			//播放列表（包含所有歌曲）
 	private LinkedList<Song> likeList = new LinkedList<Song>();			//喜欢列表，是播放列表的子集
 	private LinkedList<Song> currentList = null;						//当前列表的引用
@@ -80,16 +81,16 @@ public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 	LyricPanel panelLyric = null;   //对歌词面板的引用
 	
 	JPanel panelControl = new JPanel();
-	String iconAdd = "./res/add.png";
-	String iconAddHover = "./res/add_hover.png";
+	Image iconAdd = Util.getImage("res/add.png");
+	Image iconAddHover = Util.getImage("res/add_hover.png");
 	JButton butAdd = new JButton(new ImageIcon(iconAdd));
 	JButton butPlayChoice = new JButton(Util.iconPlayListLoop);
 	JButton butDownload = new JButton(Util.iconBaiduMusic);
 	
 	Thread controlThread = null;
 	
-	JButton butMyMusicList = new JButton(new ImageIcon("./res/mymusic.png"));
-	JButton butMyLikeList = new JButton(new ImageIcon("./res/mylike.png"));
+	JButton butMyMusicList = new JButton(new ImageIcon(Util.getImage("res/mymusic.png")));
+	JButton butMyLikeList = new JButton(new ImageIcon(Util.getImage("res/mylike.png")));
 	
 	//歌曲列表字体颜色
 	private static Color listColor = Util.getThemeDefaultColor();
@@ -109,7 +110,7 @@ public class PlayListPanel extends JPanel implements ActionListener,Runnable {
 		viewPanel.setBounds(0, 30, 300, 335);
 		viewPanel.setOpaque(false);
 				
-		list.open(playListFile);;
+		list.open(playListFile);
 		showPlayList();
 		
 		add(viewPanel);

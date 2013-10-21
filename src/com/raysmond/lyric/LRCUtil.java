@@ -10,6 +10,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import com.raysmond.internet.BaiduLyricsDownloader;
+import com.raysmond.util.Util;
 
 public class LRCUtil {
 	
@@ -49,12 +50,16 @@ public class LRCUtil {
 	 * @param lrcText the content of lyric
 	 */
 	public static void saveLRC(String dir,String lrcTitle, String lrcText) {
-		File saveDir = new File(dir);
+		File storeDirHome = new File(Util.savePath);
+		if(!storeDirHome.exists()){
+			storeDirHome.mkdir();
+		}
+		File saveDir = new File(Util.savePath + "/" + dir);
 		try{
 			if(!saveDir.exists()){
 				saveDir.mkdir();
 			}
-			File lrcFile = new File(dir + "/" + lrcTitle);
+			File lrcFile = new File(Util.savePath + "/" + dir + "/" + lrcTitle);
 			if (!lrcFile.exists()) {
 				lrcFile.createNewFile();
 			}
