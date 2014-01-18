@@ -6,9 +6,9 @@ Rita Player
 Screenshots
 ======================
 
-<img src="http://raysmond.com/sites/default/files/images/QQ%E6%88%AA%E5%9B%BE20121228205215.png" style="width:100%;" /><br/>
-<img src="http://raysmond.com/sites/default/files/images/QQ%E6%88%AA%E5%9B%BE20121228204953.png" style="width:100%;" /><br/>
-<img src="http://raysmond.com/sites/default/files/images/QQ%E6%88%AA%E5%9B%BE20121227170910.png" style="width:100%;" />
+<img src="http://blog.raysmond.com/sites/default/files/images/QQ%E6%88%AA%E5%9B%BE20121228205215.png" style="width:100%;" /><br/>
+<img src="http://blog.raysmond.com/sites/default/files/images/QQ%E6%88%AA%E5%9B%BE20121228204953.png" style="width:100%;" /><br/>
+<img src="http://blog.raysmond.com/sites/default/files/images/QQ%E6%88%AA%E5%9B%BE20121227170910.png" style="width:100%;" />
 
 Links
 ======================
